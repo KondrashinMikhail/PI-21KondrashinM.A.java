@@ -1,8 +1,6 @@
 package com.company;
 
-public enum DopEnum
-{
-    noll,
+public enum DopEnum {
     four,
     five,
     six
