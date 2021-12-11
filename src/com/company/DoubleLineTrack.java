@@ -2,9 +2,9 @@ package com.company;
 
 import java.awt.*;
 
-public class DoubleLineTrack extends Wheels {
+public class DoubleLineTrack extends Wheels{
     @Override
-    public void DrawTrack(Graphics g, Color dopColor, int x, int y) {
+    public void DrawTrack(Graphics g, Color dopColor, int x, int y){
 
         super.DrawTrack(g, dopColor, x, y);
 
@@ -23,7 +23,8 @@ public class DoubleLineTrack extends Wheels {
         g2d.drawLine(x + 35, y + 40, x + 35, y + 30);
         g2d.drawLine(x + 30, y + 35, x + 40, y + 35);
 
-        switch (numOfWheels) {
+        switch(numOfWheels)
+        {
             case five:
                 g2d.setPaint(dopColor);
                 g2d.fillOval(x + 25, y + 20, 10, 10);
