@@ -2,9 +2,12 @@ package com.company;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class Parking<T extends ITransport, W extends ITrack> extends JPanel {
-    private final T[] places;
+    private final ArrayList<T> places;
+
+    private final int maxCount = 24;
 
     private final int pictureWidth;
     private final int pictureHeight;
@@ -12,10 +15,14 @@ public class Parking<T extends ITransport, W extends ITrack> extends JPanel {
     private final int placeSizeWidth = 210;
     private final int placeSizeHeight = 80;
 
+    private final int parkPlacesWidth = 5;
+
+    private String name;
+
     public Parking(int picWidth, int picHeight) {
         int width = picWidth / placeSizeWidth;
         int height = picHeight / placeSizeHeight;
-        places = (T[]) new ITransport[width * height];
+        places = new ArrayList<>();
         pictureHeight = picHeight;
         pictureWidth = picWidth;
     }
@@ -30,8 +37,8 @@ public class Parking<T extends ITransport, W extends ITrack> extends JPanel {
 
     //==
     public boolean Same(Parking<T, W> parking, BucketExcavator bucketExcavator) {
-        for (int i = 0; i < parking.places.length; i++) {
-            if (parking.places[i] != bucketExcavator) {
+        for (int i = 0; i < parking.places.size(); i++) {
+            if (parking.places.get(i) != bucketExcavator) {
                 return false;
             }
         }
@@ -42,8 +49,8 @@ public class Parking<T extends ITransport, W extends ITrack> extends JPanel {
     public boolean NotSame(Parking<T, W> parking, BucketExcavator bucketExcavator) {
 
 
-        for (int i = 0; i < parking.places.length; i++) {
-            if (parking.places[i] == bucketExcavator) {
+        for (int i = 0; i < parking.places.size(); i++) {
+            if (parking.places.get(i) == bucketExcavator) {
                 return false;
             }
         }
@@ -51,11 +58,12 @@ public class Parking<T extends ITransport, W extends ITrack> extends JPanel {
     }
 
     public int plus(Parking<T, W> parking, T excavator) {
-        for (int i = 0; i < parking.places.length; i++) {
-            if (parking.places[i] == null) {
-                parking.places[i] = excavator;
-                return i;
-            }
+        if (parking.maxCount <= parking.places.size())
+            return -1;
+
+        for (int i = 0; i < parking.places.size() + 1; i++) {
+            parking.places.add(excavator);
+            return parking.places.indexOf(excavator);
         }
         return -1;
     }
@@ -63,23 +71,37 @@ public class Parking<T extends ITransport, W extends ITrack> extends JPanel {
     public T minus(Parking<T, W> parking, int index) {
         T deletedExcavator;
 
-        if (index > -1 && index < parking.places.length && parking.places[index] != null) {
-            deletedExcavator = parking.places[index];
-            parking.places[index] = null;
+        if (index > -1 && index < parking.places.size() && parking.places.get(index) != null) {
+            deletedExcavator = parking.places.get(index);
+            parking.places.remove(index);
             return deletedExcavator;
         }
         return null;
     }
 
-    public void Draw(Graphics g) {
-        g.clearRect(0, 0, 900, 400);
-        DrawMarking(g);
-        for (T place : places) {
-            if (place != null)
-                place.DrawExcavator(g);
-        }
+    @Override
+    public String getName() {
+        return name;
+    }
+    @Override
+    public void setName(String name){
+        this.name = name;
+    }
+    @Override
+    public String toString() {
+        return name;
     }
 
+    public void Draw(Graphics g) {
+        g.clearRect(0, 0, 700, 600);
+        for (int i = 0; i < places.size(); i++){
+            if (places.get(i) != null){
+                places.get(i).SetPosition(i / 8 * placeSizeWidth + 45, i % 8 * placeSizeHeight + 30, pictureWidth, pictureHeight);
+                places.get(i).DrawExcavator(g);
+            }
+        }
+        DrawMarking(g);
+    }
     public void DrawMarking(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
         g2d.setStroke(new BasicStroke(3));
@@ -89,5 +111,10 @@ public class Parking<T extends ITransport, W extends ITrack> extends JPanel {
                 g.drawLine(i * placeSizeWidth, j * placeSizeHeight, i * placeSizeWidth + placeSizeWidth / 2, j * placeSizeHeight);
             g.drawLine(i * placeSizeWidth, 0, i * placeSizeWidth, (pictureHeight / placeSizeHeight) * placeSizeHeight);
         }
+    }
+    public T indexator(int index){
+        if (index > -1 && index < places.size())
+            return places.get(index);
+        return null;
     }
 }
