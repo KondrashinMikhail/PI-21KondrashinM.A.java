@@ -7,8 +7,7 @@ import java.util.LinkedList;
 import java.util.Random;
 
 public class FormParking extends JPanel {
-    private JButton createUsualExcavator;
-    private JButton createBucketExcavator;
+    private JButton createExcavator;
     private JButton deleteExcavator;
     private JFormattedTextField removeIndex;
     private JPanel actions;
@@ -72,49 +71,10 @@ public class FormParking extends JPanel {
             }
         });
 
-        createUsualExcavator = new JButton("Create usual excavator");
-        createUsualExcavator.setBounds(700, 400, 200, 30);
-        createUsualExcavator.addActionListener(e -> {
-            excavator = new Excavator(new Random().nextInt(100), new Random().nextInt(2000),
-                    JColorChooser.showDialog(null, "Choose main color", null));
-            excavator.setLayout(null);
-
-            if (parking == null) {
-                JOptionPane.showMessageDialog(null, "Parking for excavator is not chosen or created");
-            }
-            else {
-                index = parking.plus(parking, excavator);
-                if (index > -1) {
-                    parking.add(excavator);
-                }
-                else {
-                    JOptionPane.showMessageDialog(null, "Parking is full");
-                }
-            }
-            Draw();
-        });
-
-        createBucketExcavator = new JButton("Create bucket excavator");
-        createBucketExcavator.setBounds(700, 440, 200, 30);
-        createBucketExcavator.addActionListener(e -> {
-            Color MainColor = JColorChooser.showDialog(null, "Choose main color", null);
-            Color DopColor = JColorChooser.showDialog(null, "Choose dop color", null);
-            excavator = new BucketExcavator(new Random().nextInt(100), new Random().nextInt(2000),
-                    MainColor, DopColor, true, true);
-            excavator.setLayout(null);
-            if (parking == null) {
-                JOptionPane.showMessageDialog(null, "Parking for bucket excavator is not chosen or created");
-            }
-            else {
-                index = parking.plus(parking, excavator);
-                if (index > -1) {
-                    parking.add(excavator);
-                }
-                else {
-                    JOptionPane.showMessageDialog(null, "Parking is full");
-                }
-            }
-            Draw();
+        createExcavator = new JButton("Create excavator");
+        createExcavator.setBounds(700, 400, 200, 30);
+        createExcavator.addActionListener(e -> {
+            createConfWindow();
         });
 
         JLabel labelTakeExcavator = new JLabel("Pick up excavator from parking lot");
@@ -166,8 +126,7 @@ public class FormParking extends JPanel {
         actions.add(createParking);
         actions.add(listBoxParking);
         actions.add(deleteParking);
-        actions.add(createUsualExcavator);
-        actions.add(createBucketExcavator);
+        actions.add(createExcavator);
         actions.add(labelTakeExcavator);
         actions.add(labelPlace);
         actions.add(removeIndex);
@@ -180,7 +139,24 @@ public class FormParking extends JPanel {
         frame.setVisible(true);
     }
 
+    public void addExcavator (Vehicle excavator) {
+        if (excavator != null) {
+            int index = parking.plus(parking, excavator);
+            if (index > -1) {
+                parking.add(excavator);
+            }
+            else {
+                JOptionPane.showMessageDialog(null, "Parking is full");
+            }
+            parking.Draw(parking.getGraphics());
+        }
+    }
+
     public void Draw() {
         parking.Draw(parking.getGraphics());
+    }
+
+    public void createConfWindow() {
+        new FormExcavatorConfig(this);
     }
 }
