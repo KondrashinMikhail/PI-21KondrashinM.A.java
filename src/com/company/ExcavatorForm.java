@@ -6,24 +6,20 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Random;
 
 public class ExcavatorForm extends JPanel {
     public JButton left;
     public JButton right;
     public JButton up;
     public JButton down;
-    public JButton createUsualExcavator;
-    public JButton createBucketExcavator;
     private Vehicle excavator;
+    private final Container container;
 
     public ExcavatorForm() throws IOException {
-        Random random = new Random();
-
         JFrame frame = new JFrame("Excavator form");
         frame.setSize(910, 550);
 
-        Container container = frame.getContentPane();
+        container = frame.getContentPane();
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(null);
@@ -65,42 +61,28 @@ public class ExcavatorForm extends JPanel {
             Draw();
         });
 
-        createUsualExcavator = new JButton("Create usual excavator");
-        createUsualExcavator.setBounds(10, 410, 200, 30);
-        createUsualExcavator.addActionListener(e -> {
-            excavator = new Excavator(random.nextInt(100), random.nextInt(2000), Color.ORANGE);
-            excavator.setBounds(0, 0, 910, 400);
-            excavator.SetPosition(random.nextInt(frame.getWidth() - 100), random.nextInt(frame.getHeight() - 200), frame.getWidth(), frame.getHeight() - 120);
-            container.add(excavator);
-            Draw();
-        });
-
-        createBucketExcavator = new JButton("Create bucket excavator");
-        createBucketExcavator.setBounds(10, 450, 200, 30);
-        createBucketExcavator.addActionListener(e -> {
-            excavator = new BucketExcavator(random.nextInt(100), random.nextInt(2000), Color.ORANGE, Color.GRAY, true, true);
-            excavator.setBounds(0, 0, 910, 400);
-            excavator.SetPosition(random.nextInt(frame.getWidth() - 100), random.nextInt(frame.getHeight() - 200), frame.getWidth(), frame.getHeight() - 120);
-            container.add(excavator);
-            Draw();
-        });
-
-
         buttonPanel.add(left);
         buttonPanel.add(down);
         buttonPanel.add(right);
         buttonPanel.add(up);
-        buttonPanel.add(createUsualExcavator);
-        buttonPanel.add(createBucketExcavator);
 
         container.add(buttonPanel);
 
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setVisible(true);
     }
 
     public void Draw() {
-        excavator.getGraphics().clearRect(0, 0, 910, 550);
+        excavator.getGraphics().clearRect(0, 0, 910, 400);
         excavator.DrawExcavator(excavator.getGraphics());
+    }
+
+    public void setExcavator(Vehicle newExcavator) {
+        this.excavator = newExcavator;
+        this.excavator.setBounds(0, 0, 910, 400);
+        this.excavator.setLayout(null);
+        this.excavator.SetPosition(100, 100, 910, 400);
+        container.add(this.excavator);
+        Draw();
     }
 }
