@@ -17,6 +17,20 @@ public class BucketExcavator extends Excavator
         this.backBucket = backBucket;
     }
 
+    public BucketExcavator(int maxSpeed, float weight, Color mainColor, Color dopColor,
+                           boolean frontBucket, boolean backBucket, int ID, int numOfWheels)
+    {
+        super(maxSpeed, weight, mainColor);
+        this.DopColor = dopColor;
+        this.frontBucket = frontBucket;
+        this.backBucket = backBucket;
+        setTrackType(ID, numOfWheels);
+    }
+
+    public void setDopColor (Color dopColor) {
+        DopColor = dopColor;
+    }
+
     @Override
     public void DrawExcavator(Graphics g)
     {
@@ -24,12 +38,12 @@ public class BucketExcavator extends Excavator
         Graphics2D g2d = (Graphics2D) g;
 
         Color mainCol = MainColor;
-        Color dopCol = DopColor;
+        //Color dopCol = DopColor;
 
         if (frontBucket)
         {
             //Ковш
-            g2d.setPaint(dopCol);
+            g2d.setPaint(DopColor);
             g2d.drawLine(startPosX + 100, startPosY, startPosX + 110, startPosY + 10);
             g2d.drawLine(startPosX + 110, startPosY + 10, startPosX + 110, startPosY + 20);
             g2d.drawLine(startPosX + 110, startPosY + 20, startPosX + 100, startPosY + 30);
@@ -54,7 +68,7 @@ public class BucketExcavator extends Excavator
         if (backBucket)
         {
             //Ковш
-            g2d.setPaint(dopCol);
+            g2d.setPaint(DopColor);
             g2d.drawLine(startPosX - 30, startPosY, startPosX - 40, startPosY + 10);
             g2d.drawLine(startPosX - 40, startPosY + 10, startPosX - 40, startPosY + 20);
             g2d.drawLine(startPosX - 40, startPosY + 20, startPosX - 30, startPosY + 30);

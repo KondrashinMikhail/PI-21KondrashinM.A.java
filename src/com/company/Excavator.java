@@ -14,6 +14,18 @@ public class Excavator extends Vehicle {
         this.Weight = weight;
         this.MainColor = mainColor;
         int ID = new Random().nextInt(3);
+        int numOfWheels = new Random().nextInt(3) + 4;
+        setTrackType(ID, numOfWheels);
+    }
+
+    public Excavator(int maxSpeed, float weight, Color mainColor, int ID, int numOfWheels) {
+        this.MaxSpeed = maxSpeed;
+        this.Weight = weight;
+        this.MainColor = mainColor;
+        setTrackType(ID, numOfWheels);
+    }
+
+    public void setTrackType(int ID, int numOfWheels) {
         switch (ID) {
             case 0:
                 track = new Track();
@@ -25,7 +37,7 @@ public class Excavator extends Vehicle {
                 track = new DoubleLineTrack();
                 break;
         }
-        track.setNumOfWheels(new Random().nextInt(3) + 4);
+        track.setNumOfWheels(numOfWheels);
     }
 
     @Override
@@ -33,12 +45,12 @@ public class Excavator extends Vehicle {
 
         Graphics2D g2d = (Graphics2D) g;
 
-        Color mainCol = MainColor;
+        //Color mainCol = MainColor;
         Color blue = new Color(0, 255, 255);
 
         //Кузов
         g2d.fillRect(startPosX + 40, startPosY, 20, 20);
-        g2d.setPaint(mainCol);
+        g2d.setPaint(MainColor);
         g2d.fillRect(startPosX, startPosY, 40, 20);
 
         //Кабина
@@ -73,6 +85,10 @@ public class Excavator extends Vehicle {
                 }
                 break;
         }
+    }
+
+    public void setMainColor(Color mainColor) {
+        MainColor = mainColor;
     }
 
     public Dimension getPreferredSize() {
